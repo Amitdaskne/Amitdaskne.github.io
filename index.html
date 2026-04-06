@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMITDASKNE | Official Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.82);
+            --blur: blur(20px);
+            --accent: #00d2ff;
+            --gradient: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            /* Using your GitHub image as background */
+            background: url('https://raw.githubusercontent.com/Amitdaskne/amitdaskne.github.io/d62c49c42ac1e5866b7e40fbb95de714963d685b/IMG_20260407_023621.png') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            color: #1d1d1f;
+        }
+
+        .overlay {
+            background: rgba(245, 247, 250, 0.55);
+            min-height: 100vh;
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            padding: 15px;
+        }
+
+        .container { max-width: 800px; margin: auto; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: var(--glass);
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.4);
+            margin-bottom: 20px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+        }
+
+        .logo { font-weight: 800; font-size: 1.2rem; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .nav-group { display: flex; gap: 5px; }
+
+        .nav-btn {
+            padding: 8px 14px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #555;
+            transition: 0.3s;
+        }
+
+        .nav-btn.active { background: white; color: var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        .content-section { display: none; animation: fadeIn 0.4s ease; }
+        .content-section.active { display: block; }
+
+        .card {
+            background: var(--glass);
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            font-weight: 800;
+            margin-bottom: 15px;
+            display: block;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 5px;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background: white;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #ddd;
+            margin: 0 5px 8px 0;
+        }
+
+        .skill-item {
+            margin-bottom: 10px;
+            line-height: 1.5;
+            display: flex;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+        .skill-item::before { content: "•"; color: var(--accent); font-weight: bold; }
+
+        .btn-action {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .contact-list { list-style: none; padding: 0; margin: 15px 0; }
+        .contact-list li {
+            padding: 12px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .contact-list a { text-decoration: none; color: #1d1d1f; font-weight: 600; font-size: 0.9rem; }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .close-btn { position: absolute; top: 15px; right: 15px; background: #eee; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="overlay">
+    <div class="container">
+        <header>
+            <div class="logo">AMITDASKNE</div>
+            <div class="nav-group">
+                <button class="nav-btn active" onclick="showTab('home', this)">Home</button>
+                <button class="nav-btn" onclick="showTab('blog', this)">Blog</button>
+                <button class="nav-btn" onclick="showTab('contact', this)">Contact</button>
+            </div>
+        </header>
+
+        <div id="home" class="content-section active">
+            <div class="card" style="text-align: center;">
+                <img src="https://raw.githubusercontent.com/Amitdaskne/amitdaskne.github.io/d62c49c42ac1e5866b7e40fbb95de714963d685b/IMG_20260407_023621.png" alt="Amit Das" class="profile-img">
+                <h1 style="margin: 0; font-size: 1.8rem;">Amit Das</h1>
+                <p style="color: #666; margin-top: 5px;">UI Designer & Full Stack Developer</p>
+            </div>
+
+            <div class="card">
+                <span class="section-title">Technical Expertise</span>
+                <div style="margin-top: 10px;">
+                    <span class="skill-tag">HTML5/CSS3</span>
+                    <span class="skill-tag">JavaScript (ES6+)</span>
+                    <span class="skill-tag">Premium UI/UX</span>
+                    <span class="skill-tag">Data Sync (GitHub API)</span>
+                    <span class="skill-tag">Firebase & Cloud Auth</span>
+                    <span class="skill-tag">Node.js & Express</span>
+                    <span class="skill-tag">REST API & JWT</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="section-title">Core Competencies</span>
+                <div class="skill-item">Strong proficiency in HTML with the ability to build website structures</div>
+                <div class="skill-item">Skilled in modern CSS design including dark mode, hover effects, and responsive layouts</div>
+                <div class="skill-item">Good understanding of JavaScript for interactive functionality</div>
+                <div class="skill-item">Experience working with Firebase (Authentication and Realtime Database)</div>
+                <div class="skill-item">Ability to develop full CRUD systems (Create, Read, Update, Delete)</div>
+                <div class="skill-item">Capable of building real-world projects like CRM systems and business tools</div>
+                <div class="skill-item">Expertise in designing UI inspired by Flipkart and Zomato</div>
+                <div class="skill-item">Problem-solving approach through practical debugging and testing</div>
+                <div class="skill-item">Experience in deploying projects using platforms like GitHub and Render</div>
+                <div class="skill-item">Ability to replicate modern UI/UX designs effectively</div>
+            </div>
+
+            <div class="card">
+                <span class="section-title">Project Milestones</span>
+                <p style="font-weight: 600; margin-bottom: 10px;">PharmaSync Pro & Key Projects</p>
+                <div class="skill-item">Developed a functional CRM system for real-world use</div>
+                <div class="skill-item">Built a barcode generator with practical implementation</div>
+                <div class="skill-item">Created a multi-user forum system</div>
+                <div class="skill-item">Working on a custom payment system (AMITCASH)</div>
+                <div class="skill-item">Designed complex UI systems like restaurant listing platforms</div>
+                <div class="skill-item">Strong hands-on experience with Firebase integration</div>
+                <div class="skill-item">Built Excel import functionality for data handling</div>
+                <div class="skill-item">Understanding of admin panel and role-based systems</div>
+            </div>
+
+            <div class="card">
+                <span class="section-title">Professional Mindset</span>
+                <div class="skill-item">Practical developer with a focus on real-world applications</div>
+                <div class="skill-item">Comfortable building complex and scalable projects</div>
+                <div class="skill-item">Strong balance between UI design and functionality</div>
+                <div class="skill-item">On the path to becoming a full-stack developer</div>
+                <div class="skill-item">Committed to continuous improvement and growth 🚀</div>
+            </div>
+        </div>
+
+        <div id="blog" class="content-section">
+            <div id="blog-container"></div>
+        </div>
+
+        <div id="contact" class="content-section">
+            <div class="card">
+                <span class="section-title">Get In Touch</span>
+                <ul class="contact-list">
+                    <li><span>📞</span><a href="tel:+918252232622">+91 82522 32622</a></li>
+                    <li><span>📧</span><a href="mailto:amitdaskishanganj@gmail.com">amitdaskishanganj@gmail.com</a></li>
+                    <li><span>📍</span><a href="#">Kishanganj, Bihar</a></li>
+                </ul>
+                <button class="btn-action" onclick="window.location.href='mailto:amitdaskishanganj@gmail.com'">Send Immediate Email</button>
+            </div>
+        </div>
+
+        <footer style="text-align: center; padding: 20px; font-size: 11px; opacity: 0.5;">
+            &copy; 2026 AMITDASKNE | Designed with ❤️
+        </footer>
+    </div>
+</div>
+
+<div id="blogModal" class="modal-overlay">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeBlog()">&times;</button>
+        <h2 id="modalTitle" style="color: var(--accent); margin-top: 0;"></h2>
+        <p id="modalBody" style="line-height: 1.6; color: #444;"></p>
+        <button class="btn-action" onclick="closeBlog()">Got it!</button>
+    </div>
+</div>
+
+<script>
+    const articles = [
+        { h: "CRM System: Managing Customer Data Efficiently", s: "A system designed to store, edit, and track customer records with ease.", l: "This CRM system allows storing customer details, editing records, and tracking orders. It uses Firebase for real-time updates." },
+        { h: "Barcode Generator: Smart Labeling System", s: "A tool to generate scannable barcodes with product details.", l: "This system creates high-quality barcodes linked with product data. It supports PDF export." },
+        { h: "Firebase Forum: Real-Time Communication Platform", s: "A forum system where users can post, like, and comment.", l: "Built using Firebase, this forum enables users to interact in real-time." },
+        { h: "AMITCASH: Custom Payment Gateway", s: "A virtual currency system with balance and transactions.", l: "AMITCASH allows users to send and receive digital currency using QR codes." },
+        { h: "Excel-Based Data Import Tool", s: "Upload and process bulk data using Excel files.", l: "This feature allows users to upload Excel sheets and automatically process entries into the system." }
+        // ... baki ke articles yahan list hote rahenge
+    ];
+
+    function renderBlog() {
+        const container = document.getElementById('blog-container');
+        articles.forEach(art => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <span class="section-title">Article</span>
+                <h3>${art.h}</h3>
+                <p>${art.s}</p>
+                <button class="btn-action" onclick="openBlog('${art.h}', '${art.l}')">Read More</button>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function showTab(tabId, btn) {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function openBlog(title, body) {
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalBody').innerText = body;
+        document.getElementById('blogModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeBlog() {
+        document.getElementById('blogModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    renderBlog();
+</script>
+
+</body>
+</html>
